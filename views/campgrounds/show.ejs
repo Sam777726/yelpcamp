@@ -1,0 +1,175 @@
+<%- include('../partials/header') -%>
+<header class="jumbotron">
+    <div class="container text-center">
+        <h1 class="display-3">Welcome to Yelp Camp!</h1>
+        <p class="lead pt-4">View our hand-picked camp sites from all over the world!</p>
+        <a class="btn btn-light btn-lg mt-3" href="/campgrounds">Campgrounds</a>
+    </div>
+</header>
+
+<div class="container-lg px-5">
+    <div class="row justify-content-center">
+        <div class="col-sm-10 col-md-4 col-lg-3 mb-4 d-lg-block">
+            <p class="lead">YelpCamp</p>
+            <div class="accordion mb-3" id="accordionExample">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                                aria-controls="collapseOne">
+                                Location
+                            </button>
+                        </h2>
+                    </div>
+
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-1"> <i class="fa fa-map-marker"></i></div>
+                                <div class="col-10">
+                                    <%= campground.location.place %>, <%= campground.location.state %>,
+                                    <%= campground.location.country %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                                aria-controls="collapseTwo">
+                                Amenities
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                        <div class="card-body">
+                            tent, campfires, food, water, sleeping bag(must carry your own)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- MAP -->
+            <div id="myMap"></div>
+        </div>
+        <div class="col-sm-10 col-md-8 col-lg-9">
+            <div class="figure border mb-4 rounded">
+                <img class="figure-img img-fluid mb-0" width="50%" src="<%= campground.image.url %>"
+                    alt="<%= campground.name%>" />
+                <div class="figure-caption bg bg-light p-2 py-3">
+                    <span>
+                        <h6 class="title float-right">$ <%= campground.price.toFixed(2)/100 %>/night</h6>
+                    </span>
+                    <h4 class="text-primary"><%= campground.name%></h4>
+                    <div class="desc pt-3">
+                        <p class="text-justify"><%= campground.description %></p>
+                        <p class="d-inline-block mb-0">Submitted By <em>
+                                <a href="/users/<%= campground.author.id %>/profile">
+                                    <%= campground.author.username %>
+                                </a></em>
+                            <%= moment(campground.createdAt).fromNow() %>
+                        </p>
+                        <div class="float-right">
+                            <% if(currentUser && campground.author.id.equals(currentUser._id)) { %>
+                            <a href="/campgrounds/<%= campground._id %>/edit"
+                                class="btn primary effect btn-lg p-0 mr-2">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST"
+                                class="d-inline">
+                                <button type="submit" class="btn danger effect btn-lg p-0 mr-2">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=" mb-5 p-3 bg-light border border-light rounded">
+                <a href="/campgrounds/<%= campground._id %>/comments/new" class="btn btn-primary btn-sm float-right">
+                    Leave a Review</a>
+                <h4 class="pl-0">Reviews</h4>
+                <hr>
+                <ul class="list-unstyled">
+                    <% if(campground.comments.length === 0){ %>
+                    <img src="/images/placeholder_images/list-app.svg" alt="thinking-man"
+                        class="img-fluid placeholder_images" />
+                    <% } %>
+                    <%campground.comments.forEach(comment => { %>
+                    <li class="mb-3">
+                        <div class="row">
+                            <div class="col-lg-9 mb-0 pr-0">
+                                <strong><i class="fa fa-user-circle-o"></i> <%= comment.author.username %></strong>
+                                <span>
+                                    <% for(var i = 0; i < comment.rating; i++) {  %>
+                                    <i class="fa fa-star"></i>
+                                    <% } %>
+                                    <% for(var i = comment.rating; i < 5; i++) {  %>
+                                    <i class="fa fa-star-o"></i>
+                                    <% } %>
+                                </span>
+                                <p class=""><%= comment.comment %></p>
+                            </div>
+                            <div class="col text-right mt-0 pt-0 pl-lg-0">
+                                <small class=""><%= moment(comment.createdAt).fromNow() %></small>
+                                <div class="d-inline d-lg-block">
+                                    <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
+                                    <small class="">
+                                        <a href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit"
+                                            class="btn primary effect btn-sm px-0"> <i class="fa fa-pencil"></i> </a>
+                                        <form class="d-inline" method="POST"
+                                            action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE">
+                                            <button class="btn danger effect btn-sm" type="submit">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </small>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+
+                    </li>
+                    <%})%>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script type='text/javascript'>
+    var mymap;
+    function loadMapScenario() {
+        var navigationBarMode = Microsoft.Maps.NavigationBarMode;
+        mymap = new Microsoft.Maps.Map(document.getElementById('myMap'), {
+            credentials: 'AqvfnXBaNGXxzmGvpim7EO9Wb6k9z-r1Qw77I8BmIEthf52hv1oalb5VVc2b6r6V',
+            center: new Microsoft.Maps.Location(`<%= campground.lat %>`, `<%= campground.lng %>`),
+            mapTypeId: Microsoft.Maps.MapTypeId.road,
+            navigationBarMode: navigationBarMode.square,
+            supportedMapTypes: [Microsoft.Maps.MapTypeId.road, Microsoft.Maps.MapTypeId.aerial],
+            zoom: 10,
+            customMapStyle: {
+                elements: {
+                    area: { fillColor: '#ffb6e591' },
+                    water: { fillColor: '#ff75cff0' },
+                    tollRoad: { fillColor: '#a964f4', strokeColor: '#a964f4' },
+                    arterialRoad: { fillColor: '#ffffff', strokeColor: '#d7dae7' },
+                    road: { fillColor: '#ffa35a', strokeColor: '#ff9c4f' },
+                    street: { fillColor: '#ffffff', strokeColor: '#ffffff' }
+                },
+                settings: {
+                    landColor: '#efe9e1'
+                }
+            }
+        });
+        var pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(`<%= campground.lat %>`, `<%= campground.lng %>`), {
+            icon: 'https://www.bingmapsportal.com/Content/images/poi_custom.png',
+        });
+        mymap.entities.push(pushpin);
+    }
+</script>
+
+<%- include('../partials/footer') -%>
