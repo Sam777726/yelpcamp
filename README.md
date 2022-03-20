@@ -1,6 +1,6 @@
 # Yelp Camp App
 
-This is an express application. This app does not use any of the front end frameworks (ReactJS, AngularJS, VueJS, etc...) for front-end part of development. The intention behind creating this web application was to learn **Backend Development**.
+This is an express application. This app does not use any of the front end frameworks (ReactJS, AngularJS, VueJS, etc...) for front-end part of development.
 The following are some of the technologies and dependencies of this applicaiton :-
 
 - Used [Bootstrap](https://getbootstrap.com/docs/4.5/getting-started/introduction/) for CSS and enhancing UI
@@ -52,13 +52,12 @@ To install and run this application locally, follow these steps :-
   ```
   nodemon
   ```
-  If yoy have `nodemon` installed on your machine _globally_
+  If you have `nodemon` installed on your machine _globally_
 
 ### POINTS TO PONDER
 
 - The last command will start a **_local server_** that will accessible on `localhost:3000`
 - You must have **_MongoDB_** installed on your machine and it must be running before **STEP 4**.
-- The Map feature does not work on _local version_ due to API key usage restrictions.
 - For Maps to work, you must acquire your own _API keys_.
 - You can either obatin those from the same sources (Bing and Opencage) or you can obtain from other Sources.
 - If you wish to switch from _Opencage API_ for geolocation to other providers, make sure to change the [Node-geocoder](https://www.npmjs.com/package/node-geocoder) `options` configuration within the application.
@@ -71,11 +70,3 @@ To install and run this application locally, follow these steps :-
 - `CLOUDINARY_API_KEY` - API Key provided by Cloudinary
 - `CLOUDINARY_API_SECRET` - API Secret provided by Cloudinary
 
-## Visit On Web
-
-If you want to see the production version of the **YelpCampApp**, you can simply visit [YelpCampApp](https://yelpcampapp.herokuapp.com).
-
-## Note
-
-- The production build and the test version of _yelpcampap_ might differ in some features since they are in development phase.
-- Sometimes, you might find the production app version of _yelpcampapp_ down for _maintainance_ work.
